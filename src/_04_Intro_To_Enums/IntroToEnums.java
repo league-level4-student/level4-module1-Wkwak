@@ -21,6 +21,7 @@ public class IntroToEnums {
 			System.out.println("INT");
 		}
 		
+		data = DataTypes.DOUBLE;
 		//They can also be used in a switch statement
 		switch(data) {
 		// Notice that 'DataTypes.' is not requires when accessing categories
