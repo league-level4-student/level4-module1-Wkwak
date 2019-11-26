@@ -118,30 +118,36 @@ public class _00_SnakeGame implements ActionListener, KeyListener {
 		// direction accordingly
 		case KeyEvent.VK_LEFT:
 			snake.setDirection(Direction.LEFT);
+			break;
 		case KeyEvent.VK_RIGHT:
 			snake.setDirection(Direction.RIGHT);
+			break;
 		case KeyEvent.VK_UP:
 			snake.setDirection(Direction.UP);
+			break;
 		case KeyEvent.VK_DOWN:
 			snake.setDirection(Direction.DOWN);
+			break;
 		case KeyEvent.VK_SPACE:
 			snake.feed();
+			break;
 			// if the space key is pressed, call the snake's feed method
 		}
 	}
 
 	private void setFoodLocation() {
 		// 1. Create a new Location object that is set to a random location
-		int randX = (int) Math.random() * WIDTH;
-		int randY = (int) Math.random() * HEIGHT;
+		int randX = (int) (Math.random() * WIDTH);
+		int randY = (int) (Math.random() * HEIGHT);
 		Location loc = new Location(randX, randY);
 		// 2. set the foodLocation variable equal to the Location object you just
 		// created.
 		// use the snake's isLocationOnSnake method to make sure you don't put the food
 		// on the snake
-		if (!snake.isLocationOnSnake(foodLocation)) {
-			foodLocation = loc;
+		while(snake.isLocationOnSnake(loc)) {
+			loc = new Location((int) (Math.random() * WIDTH), (int) (Math.random() * HEIGHT));
 		}
+		foodLocation = loc;
 	}
 
 	private void gameOver() {
@@ -177,12 +183,12 @@ public class _00_SnakeGame implements ActionListener, KeyListener {
 		snake.update();
 		// 2. if the snake is colliding with its own body
 		// or if the snake is out of bounds, call gameOver
-		if (snake.isOutOfBounds()) {
+		if (snake.isOutOfBounds() || snake.isHeadCollidingWithBody()) {
 			gameOver();
 		}
 		// 3. if the location of the head is equal to the location of the food,
 		// feed the snake and set the food location
-		if (snake.getHeadLocation() == foodLocation) {
+		if (snake.getHeadLocation().equals(foodLocation)) {
 			snake.feed();
 			setFoodLocation();
 		}

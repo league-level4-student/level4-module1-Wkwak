@@ -25,7 +25,11 @@ public class Snake {
 
 	public void feed() {
 		// 1. add a new SnakeSegment object to the snake
+		System.out.println(snake.size());
 		snake.add(new SnakeSegment(snake.get(0).getLocation(), BODY_SIZE));
+		for (int i = 0; i < snake.size(); i++) {
+			System.out.println(snake.get(i).getLocation().x + ", " + snake.get(i).getLocation().y);
+		}
 	}
 
 	public Location getHeadLocation() {
@@ -36,19 +40,20 @@ public class Snake {
 	public void update() {
 		// 1. use a switch statement to check on the currentDirection
 		// of the snake and calculate its next x and y position.
-		Location headLoc = head.getLocation();
+		int headX = 0;
+		int headY = 0;
 		switch (currentDirection) {
 		case DOWN:
-			headLoc.y++;
+			headY++;
 			break;
 		case LEFT:
-			headLoc.x--;
+			headX--;
 			break;
 		case RIGHT:
-			headLoc.x++;
+			headX++;
 			break;
 		case UP:
-			headLoc.y--;
+			headY--;
 			break;
 		default:
 			break;
@@ -61,7 +66,8 @@ public class Snake {
 		}
 
 		// 3. set the location of the head to the new location calculated in step 1
-		head.setLocation(headLoc);
+		Location newloc = new Location(head.getLocation().x + headX, head.getLocation().y + headY);
+		head.setLocation(newloc);
 
 		// 4. set canMove to true
 		canMove = true;
@@ -73,9 +79,21 @@ public class Snake {
 		// set canMove equal to false.
 		// make sure the snake cannot completely reverse directions.
 		if (canMove) {
-			currentDirection = d;
+			if (currentDirection.equals(Direction.LEFT) && d.equals(Direction.RIGHT)) {
+				canMove = false;
+			} else if (currentDirection.equals(Direction.RIGHT) && d.equals(Direction.LEFT)) {
+				canMove = false;
+			} else if (currentDirection.equals(Direction.UP) && d.equals(Direction.DOWN)) {
+				canMove = false;
+			} else if (currentDirection.equals(Direction.DOWN) && d.equals(Direction.UP)) {
+				canMove = false;
+			} else {
+				currentDirection = d;
+			}
+
 		}
 		canMove = false;
+
 	}
 
 	public void reset(Location loc) {
@@ -121,8 +139,10 @@ public class Snake {
 	public boolean isLocationOnSnake(Location loc) {
 		// 1. complete the method so it returns true if the passed in
 		// location is located on the snake
-		if(snake.contains(loc)) {
-			return true;
+		for (SnakeSegment s : snake) {
+			if (loc.equals(s.getLocation())) {
+				return true;
+			}
 		}
 		return false;
 	}
